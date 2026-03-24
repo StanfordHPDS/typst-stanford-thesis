@@ -40,8 +40,8 @@
   set page(
     paper: "us-letter",
     margin: (
-      inside: 1.5in,
-      outside: 1in,
+      left: 1.5in,
+      right: 1in,
       top: 1in,
       bottom: 1in,
     ),
