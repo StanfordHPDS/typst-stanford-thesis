@@ -258,7 +258,6 @@
     it
   }
 
-  set bibliography(style: "apa")
   show bibliography: it => {
     pagebreak(weak: true)
     it
