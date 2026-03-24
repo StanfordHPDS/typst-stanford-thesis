@@ -1,4 +1,4 @@
-# Stanford Thesis (Typst/Quarto)
+# Stanford Thesis Template for Typst and Quarto
 
 A template for Stanford PhD dissertations and theses, available as both a pure Typst template and a Quarto custom format. Based on the official [Stanford formatting requirements](https://studentservices.stanford.edu/my-academics/earn-my-degree/graduate-degree-progress/dissertations-and-theses/prepare-your-work-0) and the [suthesis-2e.sty](https://web.stanford.edu/~emma/suthesis/suthesis-template.tex) LaTeX template.
 
@@ -9,7 +9,7 @@ A template for Stanford PhD dissertations and theses, available as both a pure T
 ### Installing
 
 ```bash
-quarto use template malcolmbarrett/typst-stanford-thesis
+quarto use template StanfordHPDS/typst-stanford-thesis
 ```
 
 This will install the format extension and create an example `.qmd` file that you can use as a starting place for your dissertation.
@@ -111,4 +111,3 @@ typst compile sample-thesis/main.typ --root .
 ```
 
 The `--root .` flag is needed so Typst can access `stanford-thesis.typ` from the project root.
-
