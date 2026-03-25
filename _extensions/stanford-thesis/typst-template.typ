@@ -1,6 +1,42 @@
 // Stanford PhD Dissertation Template for Quarto/Typst
 // Based on requirements from Stanford Student Services and suthesis-2e.sty
 
+// Helper: build a List of Tables/Figures manually so the chapter prefix
+// is resolved at each figure's location, not the outline's location.
+#let _figure-list(std-kind, quarto-kind, supplement) = context {
+  let figs = query(
+    figure.where(kind: std-kind).or(figure.where(kind: quarto-kind))
+  )
+  for fig in figs {
+    let loc = fig.location()
+    let chapter = state("chapter-number").at(loc)
+    let in-appendix = state("in-appendix").at(loc)
+    let fig-num = counter(figure.where(kind: fig.kind)).at(loc).first()
+
+    let prefix = if chapter == none or chapter == 0 {
+      str(fig-num)
+    } else if in-appendix == true {
+      numbering("A.1", chapter, fig-num)
+    } else {
+      numbering("1.1", chapter, fig-num)
+    }
+
+    let caption-body = if fig.caption != none { fig.caption.body } else { [] }
+    let page-num = counter(page).at(loc).first()
+
+    block(spacing: 0.65em)[
+      #link(loc)[
+        #supplement~#prefix
+        #h(0.5em)
+        #caption-body
+        #box(width: 1fr, repeat[.])
+        #h(0.5em)
+        #page-num
+      ]
+    ]
+  }
+}
+
 #let thesis(
   // Required parameters
   title: none,
@@ -71,8 +107,20 @@
     pagebreak(weak: true)
     v(0.5in)
     if it.numbering != none {
+      // Update chapter number state and reset figure counters
+      state("chapter-number").update(counter(heading).at(it.location()).first())
+      counter(figure.where(kind: image)).update(0)
+      counter(figure.where(kind: table)).update(0)
+      counter(figure.where(kind: "quarto-float-fig")).update(0)
+      counter(figure.where(kind: "quarto-float-tbl")).update(0)
+
+      let prefix = if state("in-appendix").at(it.location()) == true {
+        "Appendix "
+      } else {
+        "Chapter "
+      }
       text(size: 1.2em, weight: "bold",
-        "Chapter " + counter(heading).display(it.numbering)
+        prefix + counter(heading).display(it.numbering)
       )
       v(0.15in)
     }
@@ -195,18 +243,14 @@
 
   if show-lot {
     pagebreak(weak: true)
-    outline(
-      title: "List of Tables",
-      target: figure.where(kind: table).or(figure.where(kind: "quarto-float-tbl")),
-    )
+    heading(level: 1, numbering: none, outlined: false, "List of Tables")
+    _figure-list(table, "quarto-float-tbl", "Table")
   }
 
   if show-lof {
     pagebreak(weak: true)
-    outline(
-      title: "List of Figures",
-      target: figure.where(kind: image).or(figure.where(kind: "quarto-float-fig")),
-    )
+    heading(level: 1, numbering: none, outlined: false, "List of Figures")
+    _figure-list(image, "quarto-float-fig", "Figure")
   }
 
   if abbreviations != none {
@@ -237,7 +281,12 @@
         set text(size: 0.9em)
         emph({
           if current.numbering != none {
-            [Chapter ]
+            let prefix = if state("in-appendix").at(current.location()) == true {
+              "Appendix "
+            } else {
+              "Chapter "
+            }
+            prefix
             numbering(current.numbering, ..counter(heading).at(current.location()))
             [. ]
           }
@@ -250,8 +299,22 @@
   )
 
   set heading(numbering: section-numbering)
+  state("in-appendix").update(false)
+  state("chapter-number").update(0)
 
-  set figure(placement: auto)
+  set figure(
+    placement: auto,
+    numbering: it => context {
+      let chapter = state("chapter-number").get()
+      if chapter == none or chapter == 0 {
+        str(it)
+      } else if state("in-appendix").get() == true {
+        numbering("A.1", chapter, it)
+      } else {
+        numbering("1.1", chapter, it)
+      }
+    },
+  )
   show figure: set block(breakable: false)
   show figure.caption: it => {
     set text(size: 0.95em)

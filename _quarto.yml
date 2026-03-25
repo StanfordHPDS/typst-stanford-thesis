@@ -10,6 +10,9 @@ book:
     - chapters/chapter-2.qmd
     - chapters/chapter-3.qmd
     - chapters/chapter-4.qmd
+  appendices:
+    - chapters/appendix-a.qmd
+    - chapters/appendix-b.qmd
 
 bibliography: sample-references.bib
 

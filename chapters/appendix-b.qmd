@@ -1,0 +1,50 @@
+# Supplementary Figures {.appendix}
+
+```{=typst}
+#lorem(100)
+```
+
+::: {#fig-convergence}
+
+```{=typst}
+#{
+  let w = 280
+  let h = 200
+  let pad = 30
+  let pts = (
+    (5, 80), (10, 60), (15, 45), (20, 35), (25, 28), (30, 22),
+    (35, 18), (40, 15), (45, 13), (50, 11), (55, 10), (60, 9),
+    (65, 8.5), (70, 8.2), (75, 8), (80, 7.9), (85, 7.8), (90, 7.7),
+  )
+  let to-x(v) = (pad + v / 100 * (w - pad * 2)) * 1pt
+  let to-y(v) = (pad + v / 100 * (h - pad * 2)) * 1pt
+
+  block(width: w * 1pt, height: h * 1pt)[
+    #place(line(start: (pad * 1pt, (h - pad) * 1pt), end: ((w - pad) * 1pt, (h - pad) * 1pt), stroke: 0.6pt))
+    #place(line(start: (pad * 1pt, pad * 1pt), end: (pad * 1pt, (h - pad) * 1pt), stroke: 0.6pt))
+    #place(dx: (w / 2 - 15) * 1pt, dy: (h - pad + 10) * 1pt, text(size: 0.8em)[_Iteration_])
+    #place(dx: (pad - 20) * 1pt, dy: (h / 2) * 1pt, rotate(-90deg, text(size: 0.8em)[_Error_]))
+    #for (i, pt) in pts.enumerate() {
+      place(dx: to-x(pt.at(0)) - 2pt, dy: to-y(pt.at(1)) - 2pt,
+        circle(radius: 2pt, fill: black)
+      )
+      if i > 0 {
+        let prev = pts.at(i - 1)
+        place(line(
+          start: (to-x(prev.at(0)), to-y(prev.at(1))),
+          end: (to-x(pt.at(0)), to-y(pt.at(1))),
+          stroke: 0.5pt,
+        ))
+      }
+    }
+  ]
+}
+```
+
+Convergence of the numerical method over iterations.
+
+:::
+
+```{=typst}
+#lorem(200)
+```

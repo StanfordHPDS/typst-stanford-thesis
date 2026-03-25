@@ -1,14 +1,28 @@
 #let equation-numbering = it => {
-  numbering("(1.1)", counter(heading).get().first(), it)
+  let chapter = counter(heading).get().first()
+  if state("in-appendix").get() == true {
+    numbering("(A.1)", chapter, it)
+  } else {
+    numbering("(1.1)", chapter, it)
+  }
 }
 
 #let callout-numbering = it => {
-  numbering("1.1", counter(heading).get().first(), it)
+  let chapter = counter(heading).get().first()
+  if state("in-appendix").get() == true {
+    numbering("A.1", chapter, it)
+  } else {
+    numbering("1.1", chapter, it)
+  }
 }
 
 #let subfloat-numbering(n-super, subfloat-idx) = {
   let chapter = counter(heading).get().first()
-  numbering("1.1a", chapter, n-super, subfloat-idx)
+  if state("in-appendix").get() == true {
+    numbering("A.1a", chapter, n-super, subfloat-idx)
+  } else {
+    numbering("1.1a", chapter, n-super, subfloat-idx)
+  }
 }
 
 #let theorem-inherited-levels = 1
