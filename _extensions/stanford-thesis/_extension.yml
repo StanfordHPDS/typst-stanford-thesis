@@ -1,13 +1,18 @@
 title: Stanford Thesis
 author: Malcolm Barrett
 version: 1.0.0
-quarto-required: ">=1.4.0"
+quarto-required: ">=1.9.17"
 contributes:
   formats:
     typst:
       template-partials:
         - typst-template.typ
         - typst-show.typ
+        - numbering.typ
+        - page.typ
+      filters:
+        - at: post-quarto
+          path: stanford-thesis.lua
       toc: false
       section-numbering: "1.1"
       show-toc: true

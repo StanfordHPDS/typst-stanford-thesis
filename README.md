@@ -12,17 +12,27 @@ A template for Stanford PhD dissertations and theses, available as both a pure T
 quarto use template StanfordHPDS/typst-stanford-thesis
 ```
 
-This will install the format extension and create an example `.qmd` file that you can use as a starting place for your dissertation.
+This will install the format extension and create a Quarto Book project with example chapter files that you can use as a starting place for your dissertation.
 
 ### Setup
 
-Use the `stanford-thesis-typst` format in your YAML front matter:
+The template uses a [Quarto Book](https://quarto.org/docs/books/) project. Thesis metadata goes in `_quarto.yml`:
 
 ```yaml
----
-title: "Your Dissertation Title"
-author:
-  - name: Your Name
+project:
+  type: book
+
+book:
+  title: "Your Dissertation Title"
+  author:
+    - name: Your Name
+  chapters:
+    - index.qmd
+    - chapter-2.qmd
+    - chapter-3.qmd
+
+bibliography: references.bib
+
 department: Your Department
 degree: Doctor of Philosophy
 department-prefix: "Department of"
@@ -37,10 +47,17 @@ dedication: |
 show-toc: true
 show-lof: true
 show-lot: true
+
 format:
   stanford-thesis-typst: default
-bibliography: references.bib
----
+```
+
+Each chapter is its own `.qmd` file. Add or remove chapter files and update the `chapters:` list in `_quarto.yml` to match.
+
+Render with:
+
+```bash
+quarto render
 ```
 
 ### YAML Options
