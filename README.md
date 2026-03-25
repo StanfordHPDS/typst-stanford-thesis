@@ -79,6 +79,59 @@ quarto render
 | `show-lof` | `true` | Show list of figures |
 | `show-lot` | `true` | Show list of tables |
 | `section-numbering` | `"1.1"` | Heading numbering format |
+| `chapter-prefix` | `"Chapter "` | Label before chapter numbers |
+| `appendix-prefix` | `"Appendix "` | Label before appendix letters |
+
+### Book Structure
+
+The template supports the standard [Quarto Book structure](https://quarto.org/docs/books/book-structure.html) features:
+
+**Unnumbered chapters** — Add `{.unnumbered}` to a chapter heading to omit the "Chapter N" prefix and numbering:
+
+```markdown
+# Introduction {.unnumbered}
+```
+
+**Parts** — Organize chapters into parts. Part divider pages are centered with Roman numeral labels (Part I, Part II, etc.):
+
+```yaml
+book:
+  chapters:
+    - index.qmd
+    - part: "Theory"
+      chapters:
+        - chapters/background.qmd
+        - chapters/methods.qmd
+    - part: "Applications"
+      chapters:
+        - chapters/results.qmd
+    - references.qmd
+```
+
+**References page** — Control bibliography placement with a `references.qmd` file containing the `{#refs}` div. The bibliography renders at this location instead of being appended at the end:
+
+```markdown
+# References {.unnumbered}
+
+::: {#refs}
+:::
+```
+
+**Appendices** — List appendix files under `appendices:`. Quarto generates a centered "Appendices" divider page and switches to A, B, C numbering:
+
+```yaml
+book:
+  appendices:
+    - chapters/appendix-a.qmd
+    - chapters/appendix-b.qmd
+```
+
+**Configurable prefixes** — Customize the "Chapter" and "Appendix" heading labels:
+
+```yaml
+chapter-prefix: "Ch. "
+appendix-prefix: "App. "
+```
 
 ### Fonts
 
@@ -97,7 +150,7 @@ format:
 You can also use the template directly with Typst, without Quarto. See `sample-thesis/` for a complete example.
 
 ```typst
-#import "stanford-thesis.typ": thesis
+#import "stanford-thesis.typ": thesis, part
 
 #show: thesis.with(
   title: "Your Dissertation Title",
@@ -114,9 +167,16 @@ You can also use the template directly with Typst, without Quarto. See `sample-t
   ],
 )
 
-= Introduction
+// Unnumbered intro
+#heading(level: 1, numbering: none)[Introduction]
 
-Your content here.
+Your intro here.
+
+#part("Theory")
+
+= Methods
+
+Your methods here.
 
 #bibliography("your-references.bib")
 ```

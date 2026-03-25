@@ -1,4 +1,4 @@
-# Supplementary Figures {.appendix}
+# Fugiat Nulla Pariatur {.appendix}
 
 ```{=typst}
 #lorem(100)
@@ -41,7 +41,7 @@
 }
 ```
 
-Convergence of the numerical method over iterations.
+Lorem ipsum dolor sit amet consectetur adipiscing elit.
 
 :::
 

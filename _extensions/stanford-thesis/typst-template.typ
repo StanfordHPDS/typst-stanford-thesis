@@ -69,6 +69,10 @@
   // Section numbering
   section-numbering: "1.1",
 
+  // Heading prefixes
+  chapter-prefix: "Chapter ",
+  appendix-prefix: "Appendix ",
+
   // Document body
   body,
 ) = {
@@ -105,27 +109,49 @@
   // ── Heading styles ──
   show heading.where(level: 1): it => {
     pagebreak(weak: true)
-    v(0.5in)
-    if it.numbering != none {
-      // Update chapter number state and reset figure counters
-      state("chapter-number").update(counter(heading).at(it.location()).first())
-      counter(figure.where(kind: image)).update(0)
-      counter(figure.where(kind: table)).update(0)
-      counter(figure.where(kind: "quarto-float-fig")).update(0)
-      counter(figure.where(kind: "quarto-float-tbl")).update(0)
 
-      let prefix = if state("in-appendix").at(it.location()) == true {
-        "Appendix "
-      } else {
-        "Chapter "
+    // Check if this is a part or appendices divider heading (set by Lua filter)
+    let part-num = state("part-number").at(it.location())
+    let is-appendices-divider = state("is-appendices-divider").at(it.location()) == true
+    if part-num != none and part-num > 0 {
+      // Part divider page: centered with "Part I" label
+      v(1fr)
+      align(center)[
+        #text(size: 1.4em, weight: "bold")[Part #numbering("I", part-num)]
+        #v(0.3in)
+        #text(size: 1.6em, weight: "bold", it.body)
+      ]
+      v(1fr)
+    } else if is-appendices-divider {
+      // Appendices divider page: centered
+      v(1fr)
+      align(center)[
+        #text(size: 1.6em, weight: "bold", it.body)
+      ]
+      v(1fr)
+    } else {
+      v(0.5in)
+      if it.numbering != none {
+        // Update chapter number state and reset figure counters
+        state("chapter-number").update(counter(heading).at(it.location()).first())
+        counter(figure.where(kind: image)).update(0)
+        counter(figure.where(kind: table)).update(0)
+        counter(figure.where(kind: "quarto-float-fig")).update(0)
+        counter(figure.where(kind: "quarto-float-tbl")).update(0)
+
+        let prefix = if state("in-appendix").at(it.location()) == true {
+          appendix-prefix
+        } else {
+          chapter-prefix
+        }
+        text(size: 1.2em, weight: "bold",
+          prefix + counter(heading).display(it.numbering)
+        )
+        v(0.15in)
       }
-      text(size: 1.2em, weight: "bold",
-        prefix + counter(heading).display(it.numbering)
-      )
-      v(0.15in)
+      text(size: 1.4em, weight: "bold", it.body)
+      v(0.3in)
     }
-    text(size: 1.4em, weight: "bold", it.body)
-    v(0.3in)
   }
 
   show heading.where(level: 2): it => {
@@ -234,11 +260,41 @@
 
   if show-toc {
     pagebreak(weak: true)
-    outline(
-      title: "Contents",
-      depth: 3,
-      indent: auto,
-    )
+    // Style part and appendices divider entries in the TOC
+    {
+      show outline.entry.where(level: 1): it => {
+        let loc = it.element.location()
+        let part-num = state("part-number").at(loc)
+        let is-appendix-divider = state("is-appendices-divider").at(loc) == true
+        if part-num != none and part-num > 0 {
+          v(0.5em)
+          strong({
+            [Part ]
+            numbering("I", part-num)
+            [ #sym.dash.em ]
+            it.body()
+            box(width: 1fr, it.fill)
+            it.page()
+          })
+          v(0.25em)
+        } else if is-appendix-divider {
+          v(0.5em)
+          strong({
+            it.body()
+            box(width: 1fr, it.fill)
+            it.page()
+          })
+          v(0.25em)
+        } else {
+          it
+        }
+      }
+      outline(
+        title: "Contents",
+        depth: 3,
+        indent: auto,
+      )
+    }
   }
 
   if show-lot {
@@ -282,9 +338,9 @@
         emph({
           if current.numbering != none {
             let prefix = if state("in-appendix").at(current.location()) == true {
-              "Appendix "
+              appendix-prefix
             } else {
-              "Chapter "
+              chapter-prefix
             }
             prefix
             numbering(current.numbering, ..counter(heading).at(current.location()))
@@ -301,6 +357,8 @@
   set heading(numbering: section-numbering)
   state("in-appendix").update(false)
   state("chapter-number").update(0)
+  state("part-number").update(0)
+  state("is-appendices-divider").update(false)
 
   set figure(
     placement: auto,
@@ -318,11 +376,6 @@
   show figure: set block(breakable: false)
   show figure.caption: it => {
     set text(size: 0.95em)
-    it
-  }
-
-  show bibliography: it => {
-    pagebreak(weak: true)
     it
   }
 
