@@ -1,4 +1,4 @@
-# Lorem Ipsum Dolor Sit Amet
+# Introduction {.unnumbered}
 
 ```{=typst}
 #lorem(500)

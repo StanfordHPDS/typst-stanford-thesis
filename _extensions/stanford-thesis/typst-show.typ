@@ -50,5 +50,11 @@ $endif$
 $if(section-numbering)$
   section-numbering: "$section-numbering$",
 $endif$
+$if(chapter-prefix)$
+  chapter-prefix: "$chapter-prefix$",
+$endif$
+$if(appendix-prefix)$
+  appendix-prefix: "$appendix-prefix$",
+$endif$
   doc,
 )

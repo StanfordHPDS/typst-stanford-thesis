@@ -1,4 +1,4 @@
-# Supplementary Tables {.appendix}
+# Voluptate Velit Esse {.appendix}
 
 ```{=typst}
 #lorem(100)
@@ -12,7 +12,7 @@
 | δ         | 42.0   | Hz     | @einstein1905   |
 | ε         | 3.14   | rad    | @abbott2016     |
 
-: Model parameters used in simulations {#tbl-parameters}
+: Lorem ipsum dolor sit amet consectetur {#tbl-parameters}
 
 ```{=typst}
 #lorem(200)

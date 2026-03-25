@@ -1,4 +1,4 @@
-#import "../stanford-thesis.typ": thesis
+#import "../stanford-thesis.typ": thesis, part
 
 #show: thesis.with(
   title: "Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit Sed Do Eiusmod Tempor",
@@ -18,19 +18,23 @@
   ],
 )
 
-= Introduction
+// Unnumbered introduction chapter
+#heading(level: 1, numbering: none)[Introduction]
 
 #lorem(500)
 
 #lorem(50) @einstein1905 #lorem(30) @abbott2016.
 
-== Background
+== Consectetur Adipiscing Elit
 
 #lorem(400)
 
-== Previous Work
+== Sed Do Eiusmod Tempor
 
 #lorem(400)
+
+// Part I
+#part("Dolor Sit Amet")
 
 = Methods
 
@@ -59,6 +63,9 @@
 
 #lorem(300)
 
+// Part II
+#part("Tempor Incididunt")
+
 = Results
 
 #lorem(200)
@@ -67,7 +74,6 @@
   let w = 280
   let h = 200
   let pad = 30
-  // Data points (x, y) in 0-100 range
   let pts = (
     (12,18), (15,25), (20,22), (25,35), (28,30), (32,42), (35,38),
     (40,50), (42,45), (48,55), (50,60), (55,58), (58,65), (62,70),
@@ -77,15 +83,10 @@
   let to-y(v) = (h - pad - v / 100 * (h - pad * 2)) * 1pt
 
   block(width: w * 1pt, height: h * 1pt)[
-    // Axes
     #place(line(start: (pad * 1pt, (h - pad) * 1pt), end: ((w - pad) * 1pt, (h - pad) * 1pt), stroke: 0.6pt))
     #place(line(start: (pad * 1pt, pad * 1pt), end: (pad * 1pt, (h - pad) * 1pt), stroke: 0.6pt))
-    // Axis labels
-    // x label: midpoint of axis is w/2, offset left by ~half char width
     #place(dx: (w / 2 - 3) * 1pt, dy: (h - pad + 10) * 1pt, text(size: 0.8em)[_x_])
-    // y label: midpoint of axis is h/2, rotated, offset left of axis
     #place(dx: (pad - 20) * 1pt, dy: (h / 2) * 1pt, rotate(-90deg, text(size: 0.8em)[_y_]))
-    // Points
     #for pt in pts {
       place(dx: to-x(pt.at(0)) - 2pt, dy: to-y(pt.at(1)) - 2pt,
         circle(radius: 2.5pt, fill: black)

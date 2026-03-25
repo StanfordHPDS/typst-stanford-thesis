@@ -10,6 +10,7 @@ contributes:
         - typst-show.typ
         - numbering.typ
         - page.typ
+        - biblio.typ
       filters:
         - at: post-quarto
           path: stanford-thesis.lua
