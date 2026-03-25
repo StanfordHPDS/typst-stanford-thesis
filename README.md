@@ -28,8 +28,8 @@ book:
     - name: Your Name
   chapters:
     - index.qmd
-    - chapter-2.qmd
-    - chapter-3.qmd
+    - chapters/chapter-2.qmd
+    - chapters/chapter-3.qmd
 
 bibliography: references.bib
 

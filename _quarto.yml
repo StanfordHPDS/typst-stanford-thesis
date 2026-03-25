@@ -7,9 +7,9 @@ book:
     - name: Jane A. Smith
   chapters:
     - index.qmd
-    - chapter-2.qmd
-    - chapter-3.qmd
-    - chapter-4.qmd
+    - chapters/chapter-2.qmd
+    - chapters/chapter-3.qmd
+    - chapters/chapter-4.qmd
 
 bibliography: sample-references.bib
 
