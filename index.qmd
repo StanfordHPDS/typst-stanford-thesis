@@ -1,0 +1,19 @@
+# Lorem Ipsum Dolor Sit Amet
+
+```{=typst}
+#lorem(500)
+```
+
+Lorem ipsum dolor sit amet [@einstein1905], consectetur adipiscing elit [@abbott2016].
+
+## Consectetur Adipiscing Elit
+
+```{=typst}
+#lorem(400)
+```
+
+## Sed Do Eiusmod Tempor
+
+```{=typst}
+#lorem(400)
+```

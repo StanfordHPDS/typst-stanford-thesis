@@ -1,2 +1,7 @@
 scratch/
 requirements.md
+
+/.quarto/
+**/*.quarto_ipynb
+
+/.luarc.json
