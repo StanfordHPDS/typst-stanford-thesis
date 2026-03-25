@@ -99,6 +99,15 @@ local refs_filter = {
             end
           end
 
+          -- Pass through CSL style so it's not lost when biblio.typ is suppressed
+          if meta["csl"] then
+            local csl_path = pandoc.utils.stringify(meta["csl"])
+            table.insert(opts, 'style: "' .. csl_path .. '"')
+          elseif meta["bibliographystyle"] then
+            local bib_style = pandoc.utils.stringify(meta["bibliographystyle"])
+            table.insert(opts, 'style: "' .. bib_style .. '"')
+          end
+
           local bib_call = "#bibliography((" ..
             table.concat(bib_files, ", ") .. "), " ..
             table.concat(opts, ", ") .. ")"
